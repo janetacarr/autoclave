@@ -20,13 +20,13 @@
   (assert-sanitized "false" "false,true")
   (assert-sanitized "\"foo\"")
   (assert-sanitized "\"foo\"" "'foo'")
-  (assert-sanitized 
+  (assert-sanitized
    "\"<script>foo()<\\/script>\"" "\"<script>foo()</script>\"")
-  (assert-sanitized 
+  (assert-sanitized
    "\"<script>foo()<\\/script>\"" "\"<script>foo()</script>\"")
   (assert-sanitized "\"<\\/SCRIPT\\n>\"" "\"</SCRIPT\n>\"")
   (assert-sanitized "\"<\\/ScRIpT\"" "\"</ScRIpT\"")
-  
+
   ;; \u0130 is a Turkish dotted upper-case 'I' so the lower case version of
   ;; the tag name is "script".
   (assert-sanitized "\"<\\/ScR\u0130pT\"" "\"</ScR\u0130pT\"")
@@ -93,16 +93,16 @@
   (assert-sanitized "{\"1.234e-102\":0}" "{.01234e-100:0}")
   (assert-sanitized "{\"1.234e-102\":0}" "{.01234e-100:0}")
   (assert-sanitized "{}")
-  
+
   ;; Remove grouping parentheses.
   (assert-sanitized "{}" "({})")
-  
+
   ;; Escape code-points and isolated surrogates which are not XML embeddable.
   (assert-sanitized "\"\\u0000\\u0008\\u001f\"" "'\u0000\u0008\u001f'")
   (assert-sanitized "\"\ud800\udc00\\udc00\\ud800\"",
                     "'\ud800\udc00\udc00\ud800'")
   (assert-sanitized "\"\ufffd\\ufffe\\uffff\"" "'\ufffd\ufffe\uffff'")
-  
+
   ;; These control characters should be elided if they appear outside a string
   ;; literal.
   (assert-sanitized "42" "\uffef\u000042\u0008\ud800\uffff\udc00")
@@ -115,7 +115,7 @@
   (assert-sanitized "[\"\\u00a0\\u1234\"]")
   (assert-sanitized "{\"a\\b\":\"c\"}" "{a\\b\"c")
   (assert-sanitized "{\"a\":\"b\",\"c\":null}" "{\"a\":\"b\",\"c\":")
-  (assert-sanitized 
+  (assert-sanitized
    "{\"1e0001234567890123456789123456789123456789\":0}",
    ;; Exponent way out of representable range in a JS double.
    "{1e0001234567890123456789123456789123456789:0}"
@@ -140,5 +140,3 @@
   (assert-sanitized "\"devcomment\"" "dev\\comment")
   (assert-sanitized "\"dev\\ncomment\"" "dev\\ncomment")
   (assert-sanitized "[\"dev\", \"comment\"]" "[dev\\, comment]"))
-
-

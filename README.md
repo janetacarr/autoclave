@@ -3,7 +3,7 @@
 A library for safely handling various kinds of user input. The idea is
 to provide a simple, convenient API that builds upon existing, proven
 libraries such as [OWASP JSON Sanitizer][owasp-json], [OWASP HTML
-Sanitizer][owasp-html], and [PegDown][pegdown]
+Sanitizer][owasp-html], ~~and Pegdown~~.
 
 [![Clojars Project](https://img.shields.io/clojars/v/alxlit/autoclave.svg)](https://clojars.org/alxlit/autoclave)
 
@@ -152,108 +152,6 @@ returned by `html-policy`).
 (def policy (html-merge-policies :BLOCKS :FORMATTING :LINKS))
 ```
 
-### Markdown
-
-There's already a PegDown wrapper for Clojure (called
-[cegdown][cegdown]).  But this one's got a few more features and I'm
-including it for the sake of completeness.
-
-By default the `markdown-to-html` function simply adheres to the
-original Markdown specification.
-
-```clj
-(markdown-to-html "# Hello, \"<em>world</em>\"")
-; "<h1>Hello, \"<em>world</em>\"</h1>"
-```
-
-#### Processors
-
-The `markdown-processor` function returns a processor factory with the
-specified behavior. Suppose, for example, you wanted to suppress all
-user-supplied HTML:
-
-```clj
-(def processor (markdown-processor :quotes
-                                   :suppress-all-html))
-
-(markdown-to-html processor "# Hello, \"<em>world</em>\"")
-; "<h1>Hello, &ldquo;world&rdquo;</h1>"
-```
-
-It's also thread-safe.
-
-Here are the available options (adapted from [here][markdown-extensions]):
-
-  * <strong>`:abbreviations`</strong> <br/>
-    Enable [abbreviations][markdown-abbr].
-  * <strong>`:all`</strong> <br/>
-    Enable all extensions, excluding the `:suppress-*` ones.
-  * <strong>`:auto-links`</strong> <br/>
-    Enable automatic linking of URLs.
-  * <strong>`:definitions`</strong> <br/>
-    Enable [definition lists][markdown-def-lists].
-  * <strong>`:fenced-code-blocks`</strong> <br/>
-    Enable fenced code blocks via different syntaxes, [one][markdown-code-1]
-    and [two][markdown-code-2].
-  * <strong>`:hardwraps`</strong> <br/>
-    Enable interpretation of single newlines as [hardwraps][markdown-hardwraps].
-  * <strong>`:none`</strong> <br/>
-    Don't enable any extensions (default).
-  * <strong>`:quotes`</strong> <br/>
-    Turn single and double quotes and angle quotes into fancy entities.
-  * <strong>`:smarts`</strong> <br/>
-    Turn ellipses, dashes, and apostrophes into fancy entities.
-  * <strong>`:smartypants`</strong> <br/>
-    Enable `:quotes` and `:smarts`.
-  * <strong>`:strikethrough`</strong> <br/>
-    Enable ~~strikethrough~~.
-  * <strong>`:suppress-all-html`</strong> <br/>
-    Enable both `:suppress-html-blocks` and `:suppress-inline-html`.
-  * <strong>`:suppress-html-blocks`</strong> <br/>
-    Suppress user-supplied block HTML tags.
-  * <strong>`:suppress-inline-html`</strong> <br/>
-    Suppress user-supplied inline HTML tags.
-  * <strong>`:tables`</strong> <br/>
-    Enable [tables][markdown-tables].
-  * <strong>`:wiki-links`</strong> <br/>
-    Enable `[[wiki-style links]]` (see below for more information).
-
-#### Link renderers
-
-You can customize how automatic, explicit (or inline), mail,
-reference, and wiki links are rendered by supplying your own
-LinkRenderer. The `markdown-link-renderer` function provides a nicer
-way to proxy it.
-
-```clj
-(def link-renderer (markdown-link-renderer
-                     {:auto-link (fn [node]
-                                   {:text (->> (.getText node)
-                                               (re-find #"://(\w+).")
-                                               second
-                                               capitalize)
-                                    :href (.getText node)
-                                    :attributes ["class" "auto-link"]})})
-  
-(def processor (markdown-processor :auto-links))
-
-(markdown-to-html processor link-renderer "http://google.com")
-; "<a href=\"http://google.com\" class=\"auto-link\">Google</a>"
-```
-
-The available overrides are (adapted from [here][markdown-link-renderer]):
-
-  * <strong>`:auto-link [^AutoLinkNode node]`</strong> <br/>
-  * <strong>`:exp-link [^ExpLinkNode node ^String text]`</strong> <br/>
-  * <strong>`:exp-image [^ExpImageNode node ^String text]`</strong> <br/>
-  * <strong>`:mail-link [^MailLinkNode node]`</strong> <br/>
-  * <strong>`:ref-link [^RefLinkNode node ^String url ^String title ^String text]`</strong> <br/>
-  * <strong>`:ref-image [^RefImageNode node ^String url ^String title ^String text]`</strong> <br/>
-  * <strong>`:wiki-link [^WikiLinkNode node]`</strong> <br/>
-
-They should return a map containing the link's `:text`, `:href`, and any other
-`:attributes` (as a flat sequence of strings) as in the example above.
-
 ## Other
 
   * [API](http://alxlit.github.io/autoclave/codox)
@@ -286,5 +184,3 @@ Distributed under the Eclipse Public License, the same as Clojure.
 [unicode-scalars]: http://www.unicode.org/glossary/#unicode_scalar_value
 [unicode-surrogates]: http://www.unicode.org/glossary/#surrogate_pair
 [xml-charsets]: http://www.w3.org/TR/xml/#charsets
-
-

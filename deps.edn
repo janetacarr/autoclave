@@ -1,0 +1,25 @@
+{:paths ["src"]
+ :deps {org.clojure/clojure {:mvn/version "1.12.0"}
+        commons-codec/commons-codec {:mvn/version "1.17.1"}
+        com.google.guava/guava {:mvn/version "33.3.1-jre"}
+        com.mikesamuel/json-sanitizer {:mvn/version "1.1"
+                                       :exclusions [com.google.guava/guava
+                                                    com.google.code.findbugs/jsr305]}
+        com.googlecode.owasp-java-html-sanitizer/owasp-java-html-sanitizer {:mvn/version "20240325.1"
+                                                                            :exclusions [commons-codec/commons-codec
+                                                                                         com.google.guava/guava
+                                                                                         com.google.code.findbugs/jsr305]}}
+ :aliases {:build {:deps {slipset/deps-deploy {:mvn/version "0.2.0"}
+                          io.github.clojure/tools.build {:mvn/version "0.9.6"}}
+                   :ns-default build}
+           :dev {:extra-deps {criterium/criterium {:mvn/version "0.4.6"}
+                              cider/cider-nrepl {:mvn/version "0.29.0"}}
+                 :main-opts ["-m" "nrepl.cmdline"
+                             "--middleware" "[cider.nrepl/cider-middleware]"]}
+           :test {:extra-paths ["test"]
+                  :extra-deps {criterium/criterium {:mvn/version "0.4.6"}
+                               io.github.cognitect-labs/test-runner
+                               {:git/tag "v0.5.1" :git/sha "dfb30dd"}}
+                  :main-opts ["-m" "cognitect.test-runner"]
+                  :exec-fn cognitect.test-runner.api/test}}
+ :mvn/repos {"github" {:url "https://maven.pkg.github.com/janetacarr/autoclave"}}}

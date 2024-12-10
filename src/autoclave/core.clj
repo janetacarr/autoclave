@@ -1,8 +1,7 @@
 (ns autoclave.core
   "Provides aliases to the important bits."
   (:require [autoclave.html :as html]
-            [autoclave.json :as json]
-            [autoclave.markdown :as markdown]))
+            [autoclave.json :as json]))
 
 (def html-sanitize
   "Alias for html/sanitize."
@@ -19,15 +18,3 @@
 (def json-sanitize
   "Alias for json/sanitize."
   json/sanitize)
-
-(def markdown-link-renderer
-  "Alias for markdown/link-renderer."
-  markdown/link-renderer)
-
-(def markdown-processor
-  "Alias for markdown/processor."
-  markdown/processor)
-
-(def markdown-to-html
-  "Alias for markdown/to-html"
-  markdown/to-html)
