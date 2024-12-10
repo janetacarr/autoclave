@@ -5,7 +5,7 @@ to provide a simple, convenient API that builds upon existing, proven
 libraries such as [OWASP JSON Sanitizer][owasp-json], [OWASP HTML
 Sanitizer][owasp-html], ~~and Pegdown~~.
 
-[![Clojars Project](https://img.shields.io/clojars/v/alxlit/autoclave.svg)](https://clojars.org/alxlit/autoclave)
+[![Clojars Project](https://img.shields.io/clojars/v/com.janetacarr/autoclave.svg)](https://clojars.org/com.janetacarr/autoclave)
 
 ## Usage
 
