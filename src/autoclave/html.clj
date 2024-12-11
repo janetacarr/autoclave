@@ -123,11 +123,10 @@
 (defn- policy-factory
   "Coerce argument to a PolicyFactory, which supports merging."
   [p]
-  (if (instance? HtmlSanitizer$Policy p)
-    (if-not (instance? PolicyFactory p)
-      (throw (Exception. (str (class p) " does not support merging.")))
-      p)
-    (apply policy (conj [] p))))
+  (cond
+    (keyword? p) (apply policy (conj [] p))
+    (instance? PolicyFactory p) p
+    :else (throw (Exception. (str (class p) " does not support merging.")))))
 
 (defn merge-policies
   "Merge multiple PolicyFactory and/or option sequences together."
